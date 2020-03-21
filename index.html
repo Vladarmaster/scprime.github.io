@@ -1,0 +1,244 @@
+<html>
+        <head>
+            <title>ScprimeStats.info</title>
+            <meta name="description" content="ScprimeStats is a service providing real-time statistics about the Scp decentralized storage network, including a Scp blockchain explorer, storage pricing, marketplace stats and mining data">
+            <meta name="keywords" content="Scp, Scprime, blockchain explorer, blockchain monitor, Scp explorer, Scp monitor, Scp navigator, Scp mining, Scprime transaction, Scp address, Scp mining pool">
+            <meta property="og:description" content="Charts, metrics and blockchain explorer for the Scprime decentralized storage network" />
+            <script src = "https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+                      <link rel="stylesheet" type="text/css" href="css/blp.css">
+            <link rel="stylesheet" type="text/css" href="css/new_table2.css">
+            <link href="https://fonts.googleapis.com/css?family=Lato:400,400i,700,900" rel="stylesheet">
+            <meta name="viewport" content="width=600"> 
+			
+            <style media="all">
+                .home-outer {
+                    margin: 25 auto;
+                    text-align: right;
+                    max-width: 1200px;
+                    min-width: 600px;    
+                    overflow: visible;
+                }
+                .home-inner {
+                    float: left;
+                    margin: 25 auto;
+                    text-align: left;
+                    width: 550px; 
+                    padding: 0 25 0 25;              
+                }
+                .home-inner2 {
+                    float: left;
+                    margin: 25 auto;
+                    text-align: left;
+                    width: 550px; 
+                    padding: 0 25 0 25;              
+                }
+                .home-element {
+                    margin: 0 25 25 25 auto;
+                    text-align: left;
+                }
+                button.mini-button {
+                    margin: 5px 0px 0px 0px;
+                    background-color: transparent;
+                    border: 2px solid #666;
+                    color: #444;
+                    border-radius: 7px;
+                    cursor: pointer
+                }
+                button.mini-button:hover {
+                    background-color: #2ccf75;
+                    border: 2px solid #fff;
+                    color: #fff;
+                    transition: 0.2s
+                }
+
+                /*** Loading animation **/
+                .loader {
+                    border: 16px solid #fff; /* Background */
+                    border-top: 16px solid #2ccf75; /* Green */
+                    border-bottom: 16px solid #2ccf75;
+                    border-radius: 50%;
+                    width: 120px;
+                    height: 120px;
+                    animation: spin 2s linear infinite;
+                }
+                @keyframes spin {
+                    0% { transform: rotate(0deg); }
+                    100% { transform: rotate(360deg); }
+                }
+            </style>
+   
+			   </head>
+          
+        <body>
+         <p>Beta version 1.1.0</p>
+            <div class="header-outer">
+                <div class="header2">
+                    <a href="index.html" style="vertical-align: middle; padding: 0 0 0 25; text-decoration:none; line-height: 185px;">
+                        
+                        <IMG SRC="assets/scp_header2.png" ALT="header" WIDTH=400 HEIGHT=73>
+                    </a>
+                    
+                    <table>
+                       
+ 
+                    <tr>
+                        <div style="position: absolute; right: 15px; top: 80px;">
+                            <input class="search-box-header" type="text2" name="search-header" id="search-header" placeholder="Search TX, block, address..." style="width: 500;
+                            height: 25;
+                            box-sizing: border-box;
+                            border: 1px solid #acacac;
+                            border-radius: 20px 0px 0px 5px;
+                            padding: 0 20;
+                            font-size: 70%;
+                            background-color: white;">
+                            
+                            <button name="searchHeader" style="height: 30; width: 30;
+                            padding: 0;
+                            background: #acacac;
+                            border: 0;
+                            -moz-border-radius: 0 5px 5px 0;
+                            -webkit-border-radius: 0 5px 5px 0;
+                            border-radius: 0 5px 5px 0;
+                            float: right;"><IMG SRC="assets/new_searchicon_white.png" ALT="search" WIDTH=20 HEIGHT=20></button>
+                            <script>
+                                $("button[name = 'searchHeader']").click(function(){
+                                    query = document.getElementById("search-header").value
+                                    address = "https://explore.siaprimestats.com/navigator?search=" + query
+                                    window.location = address
+                                })
+                                $("#search-header").keyup(function(event) {
+                                    if (event.keyCode === 13) {
+                                        $("button[name = 'searchHeader']").click();
+                                    }
+                                });
+                            </script>
+                        </div>
+                    </tr>
+                </table>
+            </div>
+        </div>
+<div style="background-color: #2074ee; height:15px;"></div>
+            <div style="background-color: #d7e3e1; height:10px;"></div>
+			<p></p>
+<script src="https://www.amcharts.com/lib/4/core.js"></script>
+<script src="https://www.amcharts.com/lib/4/maps.js"></script>
+<script src="https://www.amcharts.com/lib/4/geodata/worldLow.js"></script>
+<script src="https://www.amcharts.com/lib/4/themes/animated.js"></script>		<!-- Styles -->
+<style>
+#chartdiv {
+  width: 100%;
+  height: 500px;
+  overflow: hidden;
+}
+</style>
+
+
+<!-- Chart code -->
+<script>
+am4core.ready(function() {
+
+// Themes begin
+am4core.useTheme(am4themes_animated);
+// Themes end
+
+// Create map instance
+var chart = am4core.create("chartdiv", am4maps.MapChart);
+
+// Set map definition
+chart.geodata = am4geodata_worldLow;
+
+// Set projection
+chart.projection = new am4maps.projections.Miller();
+
+// Create map polygon series
+var polygonSeries = chart.series.push(new am4maps.MapPolygonSeries());
+
+// Exclude Antartica
+polygonSeries.exclude = ["AQ"];
+
+// Make map load polygon (like country names) data from GeoJSON
+polygonSeries.useGeodata = true;
+
+// Configure series
+var polygonTemplate = polygonSeries.mapPolygons.template;
+polygonTemplate.tooltipText = "{name}";
+polygonTemplate.polygon.fillOpacity = 0.6;
+polygonTemplate.fill = am4core.color("#375BE2");
+
+
+
+// Create hover state and set alternative fill color
+var hs = polygonTemplate.states.create("hover");
+hs.properties.fill = chart.colors.getIndex(0);
+hs.properties.fill = am4core.color("#0937E3");
+
+
+// Add image series
+var imageSeries = chart.series.push(new am4maps.MapImageSeries());
+imageSeries.mapImages.template.propertyFields.longitude = "lon";
+imageSeries.mapImages.template.propertyFields.latitude = "lat";
+imageSeries.mapImages.template.tooltipText = "{netaddress}";
+imageSeries.fill = am4core.color("#3065FB");
+imageSeries.mapImages.template.propertyFields.url = "url";
+
+
+var circle = imageSeries.mapImages.template.createChild(am4core.Circle);
+circle.radius = 4;
+circle.nonScaling = true;
+circle.fill = am4core.color("#FD2828");
+
+var circle2 = imageSeries.mapImages.template.createChild(am4core.Circle);
+circle2.radius = 5;
+circle2.nonScaling = false;
+circle.fill = am4core.color("#2FAE0F");
+
+
+circle2.events.on("inited", function(event){
+  animateBullet(event.target);
+})
+
+
+function animateBullet(circle) {
+    var animation = circle.animate([{ property: "scale", from: 1, to: 3 }, { property: "opacity", from: 1, to: 0 }], 2000, am4core.ease.circleOut);
+    animation.events.on("animationended", function(event){
+      animateBullet(event.target.object);
+    })
+}
+
+var colorSet = new am4core.ColorSet();
+
+imageSeries.dataSource.url = "adon.json";
+chart.dataSource.parser = new am4core.JSONParser();
+chart.dataSource.parser.options.emptyAs = 0;
+
+
+0
+}); // end am4core.ready()
+</script>
+
+<!-- HTML -->
+<div id="chartdiv"></div>
+
+
+                            </div>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            
+            
+            
+                  
+              
+    </div>
+</div>
+
+
+<!-- HTML -->
+<div id="chartdiv"></div>        
+
+			   </div>
+                  </div>
+          </body>
+          
+        </html>
