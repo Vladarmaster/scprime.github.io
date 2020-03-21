@@ -161,7 +161,7 @@ polygonSeries.useGeodata = true;
 
 // Configure series
 var polygonTemplate = polygonSeries.mapPolygons.template;
-polygonTemplate.tooltipText = "{as}";
+polygonTemplate.tooltipText = "{name}";
 polygonTemplate.polygon.fillOpacity = 0.6;
 polygonTemplate.fill = am4core.color("#375BE2");
 
@@ -177,7 +177,7 @@ hs.properties.fill = am4core.color("#0937E3");
 var imageSeries = chart.series.push(new am4maps.MapImageSeries());
 imageSeries.mapImages.template.propertyFields.longitude = "lon";
 imageSeries.mapImages.template.propertyFields.latitude = "lat";
-imageSeries.mapImages.template.tooltipText = "{netaddress}";
+imageSeries.mapImages.template.tooltipText = "ip:{netaddress} network:{as}";
 
 imageSeries.fill = am4core.color("#3065FB");
 imageSeries.mapImages.template.propertyFields.url = "url";
